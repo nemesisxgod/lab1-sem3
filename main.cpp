@@ -231,6 +231,7 @@ void processQuery(const string& query, DynamicArray& array, Stack* stack, Queue&
     }
 }
 
+
 int main(int argc, char* argv[]){
     string query;
     string filename;

@@ -106,6 +106,8 @@ bool is_complete(treeNode*& root) {
     return true;
 }
 
+
+
 bool is_full_tree (treeNode*& root) {
     int height = height_tree(root);
     int countIfComplete = pow(2, height) - 1;
