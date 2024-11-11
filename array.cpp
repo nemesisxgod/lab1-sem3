@@ -12,13 +12,6 @@ using namespace std;
 // };
 
  
-void initial_array (DynamicArray& array, size_t initialCapacity){  
-    array.data = new string[initialCapacity];
-    array.size = 0;
-    array.capacity = initialCapacity;
-}
-
- 
 void increase_array(DynamicArray& array){
     size_t newCapacity = array.capacity*2;
     string* newData = new string[newCapacity];
@@ -97,7 +90,7 @@ void search_array(DynamicArray& array, const string& value){
 
  
 void search_by_index_array(DynamicArray& array, const int index){
-    if (index<0 or index>array.size){
+    if (index<0 or index>=array.size){
         cout<<"invalid index"<<endl;
         return;
     }
@@ -108,7 +101,7 @@ void search_by_index_array(DynamicArray& array, const int index){
 
  
 void set_array (DynamicArray& array, const string& value, const int index){
-    if (index<0 or index>array.size){
+    if (index<0 or index>=array.size){
         cout<<"invalid index"<<endl;
         return;
     }
@@ -127,15 +120,22 @@ void print_array (DynamicArray& array){
 
  
 void free_array(DynamicArray& array) {
-    delete[] array.data;
-    array.data = nullptr;
+    if (array.data != nullptr) {  // Проверка, что указатель не является нулевым
+        delete[] array.data;
+        array.data = nullptr;  // Установка указателя в nullptr после удаления
+    }
     array.size = 0;
     array.capacity = 0;
 }
 
  
 void load_from_file_array(DynamicArray& array, const string& filename){
-    free_array(array);
+     if (array.data != nullptr){
+        free_array(array);  // Освобождение памяти, если массив уже инициализирован
+    }
+    array.size = 0;
+    array.capacity = 10;  // Начальная емкость
+    array.data = new std::string[array.capacity];
     ifstream file(filename);
     if (!file.is_open()){
         cout<<"file isnot found" << endl;

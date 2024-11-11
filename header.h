@@ -11,13 +11,10 @@ using namespace std;
 //_____________________________________________________________________________________
  
 struct DynamicArray{
-        string* data; 
-    size_t size;
-    size_t capacity;
+    string* data = nullptr; 
+    size_t size = 0;
+    size_t capacity = 1;
 };
-
- 
-void initial_array (DynamicArray& array, size_t initialCapacity);
 
  
 void increase_array(DynamicArray& array);

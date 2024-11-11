@@ -20,7 +20,6 @@ void processQuery(const string& query, DynamicArray& array, Stack* stack, Queue&
     if (tokens[0] == "APUSHBACK") {
         if (tokens.size() == 2) {
             string value = tokens[1];
-            initial_array(array, 2);
             push_back_array(array, value);
         } else {
             cout << "Error: APUSHBACK command requires 1 arguments." << endl;
@@ -30,7 +29,6 @@ void processQuery(const string& query, DynamicArray& array, Stack* stack, Queue&
         if (tokens.size() == 3) {
             int index = stoi(tokens[1]);
             string value = tokens[2];
-            initial_array(array, 2);
             push_in_array(array, value, index);
         } else {
             cout << "Error: APUSHIN command requires 2 arguments." << endl;
@@ -236,14 +234,19 @@ int main(int argc, char* argv[]){
     string query;
     string filename;
     ofstream file(filename);
-    DynamicArray arr;
-    initial_array(arr, 10); // Массив
-    Stack* stack;       // Стек
-    Queue queue;       // Очередь
-    NodeL* head;   // Односвязный список
-    NodeD* dhead;   // Двусвязный список
-    NodeH** hashTable; // Хэш-таблица
-    treeNode* cbTree;          
+
+    // Инициализация структур данных
+    DynamicArray arr; // Инициализация массива
+    
+    Stack* stack = nullptr;  // Инициализация указателя на стек
+    Queue queue;             // Очередь
+    NodeL* head = nullptr;   // Односвязный список
+    NodeD* dhead = nullptr;  // Двусвязный список
+
+    // Выделение памяти для хэш-таблицы (например, на 10 элементов)
+    NodeH** hashTable = new NodeH*[10];  
+
+    treeNode* cbTree = nullptr;       
 
     // Чтение аргументов командной строки
     for (int i = 1; i < argc; i++) {
@@ -291,17 +294,62 @@ int main(int argc, char* argv[]){
             upload_node_tree(cbTree, file, 0);
         }
         else if (command == "PRINT") {
-            std::ifstream file(filename);
+            ifstream file(filename);
             if (!file.is_open()) {
-            std::cerr << "Error: could not open file " << filename << std::endl;
+            cerr << "Error: could not open file " << filename << std::endl;
             return 1;}
-            std::string line;
-            while (std::getline(file, line)) {
-            std::cout << line << std::endl;}
+            string line;
+            while (getline(file, line)) {
+            cout << line << endl;}
             file.close(); // Закрытие файла
         } else {
             cout << "Error: unrecognized command type." << endl;
             return 1;
         }
     }
+
+    if (!query.empty()) {
+        processQuery(query, arr, stack, queue, head, dhead, hashTable, cbTree);
+    } else {
+        cout << "Error: query not specified." << endl;
+        return 1;
+    }
+
+    // Логика сохранения данных для конкретной структуры данных
+    if (!filename.empty() && !query.empty()) {
+        stringstream ss(query);
+        string command;
+        ss >> command;
+
+        // Проверка команд для массива
+        if (command[0] == 'A') {
+            upload_to_file_array(arr, filename);
+        }
+        // Проверка команд для стека
+        else if (command[0] == 'S') {
+            upload_to_file_stack(stack, filename);
+        }
+        // Проверка команд для очереди
+        else if (command[0] == 'Q') {
+            upload_to_file_queue(queue, filename);
+        }
+        // Проверка команд для односвязного списка
+        else if (command[0] == 'L' && command[1] == 'S') {
+            upload_to_file_list(head, filename);
+        }
+        // Проверка команд для двусвязного списка
+        else if (command[0] == 'L' && command[1] == 'D') {
+            upload_to_file_doublylist(dhead, filename);
+        }
+        // Проверка команд для хэш-таблицы
+        else if (command[0] == 'H') {
+            upload_to_file_hash(hashTable, filename);
+        }
+        // Проверка команд для полного бинарного дерева
+        else if (command[0] == 'T') {
+            upload_to_file_tree(cbTree, file);
+        }
+    }
+
+    return 0;
 }
