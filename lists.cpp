@@ -66,38 +66,44 @@ void remove_from_tail_list(NodeL*& head){
 
  
 void remove_by_value_list(NodeL*& head, const string& value){
-    if (!head){
-        return;
+    if (!head) {
+        return;  // Если список пуст, ничего не делаем
     }
 
-    if (head->data == value){
+    // Если элемент для удаления — это первый элемент списка
+    if (head->data == value) {
         remove_from_head_list(head);
         return;
     }
 
     NodeL* current = head;
-
+    
+    // Ищем элемент с заданным значением
     while (current->next && current->next->data != value) {
         current = current->next;
     }
 
-    if (current->next){
-        NodeL* temp = current;
-        current->next=current->next->next;
-        delete temp;
+    // Если элемент найден (current->next не равен nullptr)
+    if (current->next) {
+        NodeL* temp = current->next;  // Элемент, который нужно удалить
+        current->next = current->next->next;  // Переназначаем указатель
+        delete temp;  // Удаляем элемент
     }
 }
 
  
-NodeL* search_list(NodeL*& head, const string& value) {
+NodeL* search_list(NodeL*& head, const string& value, int& index) {
     NodeL* current = head;
+    index = 0;  // Начальный индекс
+    
     while (current) {
         if (current->data == value) {
-            return current;
+            return current;  // Возвращаем найденный элемент
         }
-        current = current->next; 
+        current = current->next;
+        index++;  // Увеличиваем индекс, двигаясь по списку
     }
-    return nullptr;
+    return nullptr;  // Если не нашли элемент, возвращаем nullptr
 }
 
  
@@ -133,7 +139,6 @@ void load_from_file_list(NodeL*& head, const string& filename){
     file.close();
 }
 
- 
 void upload_to_file_list(NodeL* head, const string& filename){
     ofstream file(filename);
     if (!file.is_open()) {
@@ -142,7 +147,7 @@ void upload_to_file_list(NodeL* head, const string& filename){
         }
 
     NodeL* current = head;
-    while (current->next) {
+    while (current) {
         file << current->data << endl;
         current = current->next;
     }
@@ -214,7 +219,7 @@ void remove_from_tail_doublylist(NodeD*& head){
     }
 
     NodeD* current = head;
-    while(current->next){
+    while (current->next){
         current = current->next;
     }
     
@@ -223,40 +228,48 @@ void remove_from_tail_doublylist(NodeD*& head){
 }
 
  
-void remove_by_value_doublylist(NodeD*& head, const string& value){
-    if (!head){
-        return;
+void remove_by_value_doublylist(NodeD*& head, const string& value) {
+    if (!head) {
+        return;  // Если список пуст, ничего не делаем
     }
 
-    if (head->data == value){
+    // Если удаляем первый элемент
+    if (head->data == value) {
         remove_from_head_doublylist(head);
         return;
     }
 
     NodeD* current = head;
 
-    while (current->next && current->next->data != value) {
+    // Ищем элемент с данным значением
+    while (current && current->data != value) {
         current = current->next;
     }
 
-    if (current->next=nullptr){
-        remove_from_tail_doublylist(head);
-    }
-    else {
-        current->prev->next = current->next;
-        current->next->prev = current->prev;
-        delete current;
+    // Если элемент найден
+    if (current) {
+        // Если элемент - последний
+        if (!current->next) {
+            remove_from_tail_doublylist(head);
+        } else {  // Если элемент в середине списка
+            current->prev->next = current->next;  // Обновляем указатель следующего элемента
+            current->next->prev = current->prev;  // Обновляем указатель предыдущего элемента
+            delete current;  // Удаляем текущий элемент
+        }
     }
 }
 
  
-NodeD* search_doublylist(NodeD*& head, const string& value) {
+NodeD* search_doublylist(NodeD*& head, const string& value,int& index) {
     NodeD* current = head;
+    index = 0;  // Начальный индекс
+    
     while (current) {
         if (current->data == value) {
-            return current;
+            return current;  // Возвращаем найденный элемент
         }
-        current = current->next; 
+        current = current->next;
+        index++;  // Увеличиваем индекс, двигаясь по списку
     }
     return nullptr;
 }
@@ -303,7 +316,7 @@ void upload_to_file_doublylist(NodeD* head, const string& filename){
         }
 
     NodeD* current = head;
-    while (current->next) {
+    while (current) {
         file << current->data << endl;
         current = current->next;
     }

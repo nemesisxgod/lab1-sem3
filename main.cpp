@@ -7,7 +7,7 @@
 
 using namespace std;
 
-void processQuery(const string& query, DynamicArray& array, Stack* stack, Queue& queue, NodeL*& singlyList, NodeD*& doublyList, NodeH** hashTable, treeNode*& tree) {
+void processQuery(const string& query, DynamicArray& array, Stack* stack, Queue* queue, NodeL*& singlyList, NodeD*& doublyList, NodeH** hashTable, treeNode*& tree) {
     vector<string> tokens;
     stringstream ss(query);
     string token;
@@ -113,7 +113,10 @@ void processQuery(const string& query, DynamicArray& array, Stack* stack, Queue&
     } else if (tokens[0] == "LSSEARCH") {
         if (tokens.size() == 2) {
             string value = tokens[1];
-            search_list(singlyList, value);
+            int index=0;
+            if (search_list(singlyList, value, index)!=nullptr){
+                cout<<"index is "<<index << endl;
+            }
         } else {
             cout << "Error: LSSEARCH requires 1 argument." << endl;
         }
@@ -148,7 +151,10 @@ void processQuery(const string& query, DynamicArray& array, Stack* stack, Queue&
     }else if (tokens[0] == "LDSEARCH") {
         if (tokens.size() == 2) {
             string value = tokens[1];
-            search_doublylist(doublyList, value);
+            int index=0;
+            if (search_doublylist(doublyList, value, index)!=nullptr){
+                cout<<"index is "<<index << endl;
+            }
         } else {
             cout << "Error: LDSEARCH requires 1 argument." << endl;
         }
@@ -238,8 +244,8 @@ int main(int argc, char* argv[]){
     // Инициализация структур данных
     DynamicArray arr; // Инициализация массива
     
-    Stack* stack = nullptr;  // Инициализация указателя на стек
-    Queue queue;             // Очередь
+    Stack* stack = new Stack();  // Инициализация указателя на стек
+    Queue* queue = new Queue();             // Очередь
     NodeL* head = nullptr;   // Односвязный список
     NodeD* dhead = nullptr;  // Двусвязный список
 

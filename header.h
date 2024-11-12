@@ -109,7 +109,7 @@ void remove_from_tail_list(NodeL*& head);
 void remove_by_value_list(NodeL*& head, const string& value);
 
  
-NodeL* search_list(NodeL*& head, const string& value);
+NodeL* search_list(NodeL*& head, const string& value, int& index);
 
  
 void print_list(NodeL* head);
@@ -145,7 +145,7 @@ void remove_from_tail_doublylist(NodeD*& head);
 void remove_by_value_doublylist(NodeD*& head, const string& value);
 
  
-NodeD* search_doublylist(NodeD*& head, const string& value);
+NodeD* search_doublylist(NodeD*& head, const string& value, int& index);
 
  
 void print_doublylist(NodeD* head);
@@ -174,32 +174,32 @@ struct Queue {
 };
 
  
-bool is_queue_empty(const Queue& queue);
+bool is_queue_empty(const Queue* queue);
 
  
-void push_queue(Queue& queue, string value);
+void push_queue(Queue* queue, string value);
 
  
-string pop_queue(Queue& queue);
+string pop_queue(Queue* queue);
 
  
-void print_queue(const Queue& queue);
+void print_queue(const Queue* queue);
 
  
-void clear_queue(Queue& queue);
+void clear_queue(Queue* queue);
 
  
-void upload_to_file_queue(const Queue& queue, const string& filename);
+void upload_to_file_queue(const Queue* queue, const string& filename);
 
  
-void load_from_file_queue(Queue& queue, const string& filename);
+void load_from_file_queue(Queue* queue, const string& filename);
 
 //_____________________________________________________________________________________
 
  
 struct NodeS {
     string data;
-    NodeS* next;
+    NodeS* next = nullptr;
 };
 
  

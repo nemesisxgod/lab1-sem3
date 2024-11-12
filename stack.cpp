@@ -52,6 +52,7 @@ void print_stack(Stack* stack) {
 
  
 void free_stack(Stack* stack) {
+    if (!stack) return;
     while (stack->head) {
         pop_stack(stack);
     }
@@ -65,10 +66,19 @@ void load_from_file_stack(Stack* stack, const string& filename){
         cout<<"file isnot found" << endl;
         return;
     }
-
+    Stack tempStack;  // временный стек
     string stroka;
-    while(getline(file, stroka)){
-        push_stack(stack, stroka);    
+
+    // Загружаем элементы в временный стек
+    while (getline(file, stroka)) {
+        push_stack(&tempStack, stroka);
+    }
+    file.close();
+
+    // Переносим элементы из временного стека в основной, чтобы сохранить исходный порядок
+    while (tempStack.head != nullptr) {
+        push_stack(stack, tempStack.head->data);
+        pop_stack(&tempStack);
     }
 
     file.close();
