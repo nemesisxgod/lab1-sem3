@@ -348,7 +348,7 @@ int main(int argc, char* argv[]){
         }
         // Проверка команд для полного бинарного дерева
         else if (command[0] == 'T') {
-            upload_to_file_tree(cbTree, file);
+            upload_to_file_tree(cbTree, filename);
         }
     }
 
