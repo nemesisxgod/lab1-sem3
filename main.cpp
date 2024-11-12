@@ -5,6 +5,13 @@
 #include <sstream>
 #include <vector>
 
+#include "array.cpp"
+#include "hashtable.cpp"
+#include "lists.cpp"
+#include "queue.cpp"
+#include "stack.cpp"
+#include "tree.cpp"
+
 using namespace std;
 
 void processQuery(const string& query, DynamicArray& array, Stack* stack, Queue* queue, NodeL*& singlyList, NodeD*& doublyList, NodeH** hashTable, treeNode*& tree) {
@@ -348,7 +355,7 @@ int main(int argc, char* argv[]){
         }
         // Проверка команд для полного бинарного дерева
         else if (command[0] == 'T') {
-            upload_to_file_tree(cbTree, file);
+            upload_to_file_tree(cbTree, filename);
         }
     }
 
