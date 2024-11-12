@@ -174,7 +174,7 @@ void clear_tree(treeNode*& root) {
 void load_from_file_tree(treeNode*& root, const string& file) {
     clear_tree(root);
     ifstream load(file);
-    if (!load) {
+    if (!load.is_open()) {
         cout << "Failed to open file.\n";
         return;
     }
@@ -197,8 +197,10 @@ void upload_node_tree(treeNode* node, ofstream& file, int len) { //ВСПОМО�
     upload_node_tree(node->right, file, len + 1);
 }
 
-void upload_to_file_tree(treeNode* root, ofstream& file) {
-    if (!file) {
+void upload_to_file_tree(treeNode* root, const string& filename) {
+    ofstream file (filename);
+    
+    if (!file.is_open()) {
         cout << "file isnot found"<<endl;
         return;
     }
