@@ -171,6 +171,21 @@ void clear_tree(treeNode*& root) {
     root = nullptr; 
 }
 
+void load_from_file_tree(treeNode*& root, const string& file) {
+    clear_tree(root);
+    ifstream load(file);
+    if (!load) {
+        cout << "Failed to open file.\n";
+        return;
+    }
+
+    int value;
+    while (load >> value) {
+        push_tree(root, value);
+    }
+    load.close();
+}
+
 void upload_node_tree(treeNode* node, ofstream& file, int len) { //ВСПОМОГАТЕЛЬНАЯ ФУНКЦИЯ ДЛЯ ВЫВОДА
     if (!node) return;
 

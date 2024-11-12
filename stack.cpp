@@ -37,7 +37,6 @@ void pop_stack(Stack* stack) {
  
 void print_stack(Stack* stack) {
     if (stack->head == nullptr) {
-        cout << "stack is empty" << endl;
         return;
     }
 

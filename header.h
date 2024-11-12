@@ -267,6 +267,8 @@ bool search_tree(treeNode* node, int val);
 
 void clear_tree(treeNode*& root);
 
+void load_from_file_tree(treeNode*& root, const string& file);
+
 void upload_node_tree(treeNode* node, ofstream& file, int len);
 
 void upload_to_file_tree(treeNode* root, ofstream& file);

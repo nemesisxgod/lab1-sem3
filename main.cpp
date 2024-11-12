@@ -222,14 +222,9 @@ void processQuery(const string& query, DynamicArray& array, Stack* stack, Queue*
         print_pre_order(tree);
     }
 
-    // Общая операция PRINT для всех структур данных
+    //Общая операция PRINT для всех структур данных
     else if (tokens[0] == "PRINT") {
-        print_array(array);
-        print_stack(stack);
-        print_queue(queue);
-        print_list(singlyList);
-        print_doublylist(doublyList);
-        print_hash(hashTable);
+        cout<<"The structure is deduced."<<endl;
     } else {
         cout << "Unknown command: " << tokens[0] << endl;
     }
@@ -297,7 +292,7 @@ int main(int argc, char* argv[]){
         }
         // Проверка команд для полного бинарного дерева
         else if (command[0] == 'T') {
-            upload_node_tree(cbTree, file, 0);
+            load_from_file_tree(cbTree, filename);
         }
         else if (command == "PRINT") {
             ifstream file(filename);

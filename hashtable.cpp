@@ -23,7 +23,7 @@ int hash_function(const string& key) {
 
  
 void push_hash(NodeH* table[], const string& key, const string& value) {
-    int index = hash_function(key);
+    int index = hash_function(key) % TABLE_SIZE;
     NodeH* newNode = new NodeH;
     newNode->key = key;
     newNode->value = value;
@@ -51,12 +51,13 @@ void push_hash(NodeH* table[], const string& key, const string& value) {
 
  
 int search_hash(NodeH* table[], const string& key) {
-    int index = hash_function(key);
+    int index = hash_function(key) % TABLE_SIZE;
     NodeH* temp = table[index];
 
     // Перебираем элементы цепочки
     while (temp != nullptr) {
         if (temp->key == key) {
+            cout<<temp->value<<endl;
             return stoi(temp->value);
         }
         temp = temp->next;
@@ -67,7 +68,7 @@ int search_hash(NodeH* table[], const string& key) {
 
  
 void pop_hash(NodeH* table[], const string& key) {
-    int index = hash_function(key);
+    int index = hash_function(key) % TABLE_SIZE;
     NodeH* temp = table[index];
     NodeH* prev = nullptr;
 
@@ -92,6 +93,16 @@ void pop_hash(NodeH* table[], const string& key) {
 
  
 void print_hash(NodeH* table[]) {
+    bool isEmpty = true;
+
+    for (int i = 0; i < TABLE_SIZE; i++) {
+        if (table[i] != nullptr) {
+            isEmpty = false;
+            break;
+        }
+    }
+
+    if (isEmpty) return;
     for (int i = 0; i < TABLE_SIZE; i++) {
         cout << "Table[" << i << "]: ";
         NodeH* temp = table[i];

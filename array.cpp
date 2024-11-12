@@ -112,6 +112,7 @@ void set_array (DynamicArray& array, const string& value, const int index){
 
  
 void print_array (DynamicArray& array){
+    if (array.size == 0)return; 
     for (size_t i=0; i<array.size; i++){
         cout<<array.data[i]<<' ';
     }
