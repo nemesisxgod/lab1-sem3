@@ -115,38 +115,64 @@ bool is_full_tree (treeNode*& root) {
 }
 
 void push_tree(treeNode*& root, int value) {
-    if (root == nullptr) {
+    if (root == nullptr) { // Если дерево пустое, создаем корень
         root = new treeNode(value);
         return;
     }
 
-    if (root->left == nullptr) {
-        root->left = new treeNode(value);
-        return;
-    } 
+    QueueT nodeQueue = {nullptr, nullptr}; // Инициализация очереди для обхода дерева по уровням
+    push_queueT(nodeQueue, root);
 
-    else if (root->right == nullptr) {
-        root->right = new treeNode(value);
-        return;
-    }
+    while (!is_queueT_empty(nodeQueue)) {
+        treeNode* current = pop_queueT(nodeQueue);
 
-    if (is_full_tree(root)) {
-        push_tree (root->left, value);
-        return;
-    }
-    
-    if (is_full_tree(root->left)) {
-        push_tree (root->right, value);
-    } else {
-        push_tree (root->left, value);
+        // Проверка левого узла
+        if (current->left == nullptr) {
+            current->left = new treeNode(value); // Вставляем значение в левый узел
+            return;
+        } else {
+            push_queueT(nodeQueue, current->left); // Добавляем левый узел в очередь для проверки
+        }
+
+        // Проверка правого узла
+        if (current->right == nullptr) {
+            current->right = new treeNode(value); // Вставляем значение в правый узел
+            return;
+        } else {
+            push_queueT(nodeQueue, current->right); // Добавляем правый узел в очередь для проверки
+        }
     }
 }
 
-void print_pre_order(treeNode* node) {
-    if (node == nullptr) return;
-    print_pre_order(node->left);
-    cout << node->value << " ";
-    print_pre_order(node->right);
+void print_lvl(treeNode* root, int level) {
+    if (root == nullptr) {
+        return;
+    }
+    
+    int width = pow(2, height_tree(root)) - 1;
+    int spacesCnt = width / 2;
+    string spacesBefore(spacesCnt, ' ');
+    string spacesAfter(spacesCnt + 1, ' ');
+    
+    
+    if (level == 1) {
+        cout << spacesBefore << root->value << spacesAfter; // Вывод значения узла
+    } else {
+        print_lvl(root->left, level - 1);  // Обход левого поддерева
+        print_lvl(root->right, level - 1); // Обход правого поддерева
+    }
+}
+
+
+ 
+// Функция для вывода дерева в виде "змейки"
+void print_tree(treeNode* root) {
+    int height = height_tree(root); // Определяем высоту дерева
+
+    for (int i = 1; i <= height; i++) {
+        print_lvl(root, i); // Выводим узлы на текущем уровне
+        cout << endl; // Переход на новую строку после каждого уровня
+    }
 }
 
 // Поиск элемента в дереве
@@ -186,28 +212,32 @@ void load_from_file_tree(treeNode*& root, const string& file) {
     load.close();
 }
 
-void upload_node_tree(treeNode* node, ofstream& file, int len) { //ВСПОМОГАТЕЛЬНАЯ ФУНКЦИЯ ДЛЯ ВЫВОДА
-    if (!node) return;
-
-    upload_node_tree(node->left, file, len + 1);
-    
-    file << string(len * 4, ' '); // Устанавливаем отступы
-    file << node->value << endl; // Записываем значение узла
-
-    upload_node_tree(node->right, file, len + 1);
-}
-
 void upload_to_file_tree(treeNode* root, const string& filename) {
-    ofstream file (filename);
-    
+    ofstream file(filename);
     if (!file.is_open()) {
-        cout << "file isnot found"<<endl;
+        cout << "file is not found" << endl;
         return;
     }
 
     if (!root) {
         file << "tree is empty" << endl;
     } else {
-        upload_node_tree(root, file, 0);
+        QueueT queue = {nullptr, nullptr};
+        push_queueT(queue, root);
+
+        // Обход дерева по уровням и запись значений в файл
+        while (!is_queueT_empty(queue)) {
+            treeNode* current = pop_queueT(queue);
+            file << current->value << endl; // Запись каждого значения на новой строке
+
+            // Добавляем потомков текущего узла в очередь
+            if (current->left != nullptr) {
+                push_queueT(queue, current->left);
+            }
+            if (current->right != nullptr) {
+                push_queueT(queue, current->right);
+            }
+        }
     }
+    file.close();
 }

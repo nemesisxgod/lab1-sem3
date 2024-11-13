@@ -261,15 +261,15 @@ bool is_full_tree (treeNode*& root);
 
 void push_tree(treeNode*& root, int value);
 
-void print_pre_order(treeNode* node);
+void print_lvl(treeNode* node);
+
+void print_tree(treeNode* node);
 
 bool search_tree(treeNode* node, int val);
 
 void clear_tree(treeNode*& root);
 
 void load_from_file_tree(treeNode*& root, const string& file);
-
-void upload_node_tree(treeNode* node, ofstream& file, int len);
 
 void upload_to_file_tree(treeNode* root, const string& filename);
 

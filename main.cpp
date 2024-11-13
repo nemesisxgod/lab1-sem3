@@ -5,13 +5,6 @@
 #include <sstream>
 #include <vector>
 
-#include "array.cpp"
-#include "hashtable.cpp"
-#include "lists.cpp"
-#include "queue.cpp"
-#include "stack.cpp"
-#include "tree.cpp"
-
 using namespace std;
 
 void processQuery(const string& query, DynamicArray& array, Stack* stack, Queue* queue, NodeL*& singlyList, NodeD*& doublyList, NodeH** hashTable, treeNode*& tree) {
@@ -226,7 +219,7 @@ void processQuery(const string& query, DynamicArray& array, Stack* stack, Queue*
             cout << "Error: CBFIND command requires 1 argument." << endl;
         }
     } else if (tokens[0] == "TDISPLAY") {
-        print_pre_order(tree);
+        print_tree(tree);
     }
 
     //Общая операция PRINT для всех структур данных
