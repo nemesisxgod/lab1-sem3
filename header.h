@@ -131,33 +131,33 @@ struct NodeD{
 };
 
  
-void add_to_head_doublylist(NodeD*& head, const string& value);
+void add_to_head_doublylist(NodeD*& head, NodeD*& tail, const string& value);
 
  
-void add_to_tail_doublylist(NodeD*& head, const string& value);
+void add_to_tail_doublylist(NodeD*& head, NodeD*& tail, const string& value);
 
  
-void remove_from_head_doublylist(NodeD*& head);
+void remove_from_head_doublylist(NodeD*& head, NodeD*& tail);
  
-void remove_from_tail_doublylist(NodeD*& head);
+void remove_from_tail_doublylist(NodeD*& head, NodeD*& tail);
 
  
-void remove_by_value_doublylist(NodeD*& head, const string& value);
+void remove_by_value_doublylist(NodeD*& head, NodeD*& tail, const string& value);
 
  
-NodeD* search_doublylist(NodeD*& head, const string& value, int& index);
+NodeD* search_doublylist(NodeD* head, NodeD* tail, const string& value, int& index);
 
  
-void print_doublylist(NodeD* head);
+void print_doublylist(NodeD* head, NodeD* tail);
 
  
-void free_doublylist(NodeD*& head);
+void free_doublylist(NodeD*& head, NodeD*& tail);
 
  
-void load_from_file_doublylist(NodeD*& head, const string& filename);
+void load_from_file_doublylist(NodeD*& head, NodeD*& tail, const string& filename);
 
  
-void upload_to_file_doublylist(NodeD* head, const string& filename);
+void upload_to_file_doublylist(NodeD* head, NodeD* tail, const string& filename);
 
 //_____________________________________________________________________________________
 

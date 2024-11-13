@@ -7,7 +7,7 @@
 
 using namespace std;
 
-void processQuery(const string& query, DynamicArray& array, Stack* stack, Queue* queue, NodeL*& singlyList, NodeD*& doublyList, NodeH** hashTable, treeNode*& tree) {
+void processQuery(const string& query, DynamicArray& array, Stack* stack, Queue* queue, NodeL*& singlyList, NodeD*& doublyListH,NodeD*& doublyListT, NodeH** hashTable, treeNode*& tree) {
     vector<string> tokens;
     stringstream ss(query);
     string token;
@@ -137,14 +137,14 @@ void processQuery(const string& query, DynamicArray& array, Stack* stack, Queue*
    else if (tokens[0] == "LDADDHEAD") {
         if (tokens.size() == 2) {
             string value = tokens[1];
-            add_to_head_doublylist(doublyList, value);
+            add_to_head_doublylist(doublyListH, doublyListT, value);
         } else {
             cout << "Error: LDADDHEAD requires 1 argument." << endl;
         }
     } else if (tokens[0] == "LDADDTAIL") {
         if (tokens.size() == 2) {
             string value = tokens[1];
-            add_to_tail_doublylist(doublyList, value);
+            add_to_tail_doublylist(doublyListH, doublyListT, value);
         } else {
             cout << "Error: LDADDTAIL requires 1 argument." << endl;
         }
@@ -152,20 +152,20 @@ void processQuery(const string& query, DynamicArray& array, Stack* stack, Queue*
         if (tokens.size() == 2) {
             string value = tokens[1];
             int index=0;
-            if (search_doublylist(doublyList, value, index)!=nullptr){
+            if (search_doublylist(doublyListH, doublyListT, value, index)!=nullptr){
                 cout<<"index is "<<index << endl;
             }
         } else {
             cout << "Error: LDSEARCH requires 1 argument." << endl;
         }
     } else if (tokens[0] == "LDDELHEAD") {
-        remove_from_head_doublylist(doublyList);
+        remove_from_head_doublylist(doublyListH, doublyListT);
     } else if (tokens[0] == "LDDELTAIL") {
-        remove_from_tail_doublylist(doublyList);
+        remove_from_tail_doublylist(doublyListH, doublyListT);
     } else if (tokens[0] == "LDDELVALUE"){
         if  (tokens.size() == 2) {
             string value = tokens[1];
-            remove_by_value_doublylist(doublyList, value);
+            remove_by_value_doublylist(doublyListH, doublyListT, value);
         } else {
             cout << "Error: LDDELVALUE requires 1 argument." << endl;
         }
@@ -243,7 +243,7 @@ int main(int argc, char* argv[]){
     Queue* queue = new Queue();             // Очередь
     NodeL* head = nullptr;   // Односвязный список
     NodeD* dhead = nullptr;  // Двусвязный список
-
+    NodeD* dtail = nullptr; 
     // Выделение памяти для хэш-таблицы (например, на 10 элементов)
     NodeH** hashTable = new NodeH*[10];  
 
@@ -284,7 +284,7 @@ int main(int argc, char* argv[]){
         }
         // Проверка команд для двусвязного списка
         else if (command[0] == 'L' && command[1] == 'D') {
-            load_from_file_doublylist(dhead, filename);
+            load_from_file_doublylist(dhead, dtail, filename);
         }
         // Проверка команд для хэш-таблицы
         else if (command[0] == 'H') {
@@ -310,7 +310,7 @@ int main(int argc, char* argv[]){
     }
 
     if (!query.empty()) {
-        processQuery(query, arr, stack, queue, head, dhead, hashTable, cbTree);
+        processQuery(query, arr, stack, queue, head, dhead, dtail, hashTable, cbTree);
     } else {
         cout << "Error: query not specified." << endl;
         return 1;
@@ -340,7 +340,7 @@ int main(int argc, char* argv[]){
         }
         // Проверка команд для двусвязного списка
         else if (command[0] == 'L' && command[1] == 'D') {
-            upload_to_file_doublylist(dhead, filename);
+            upload_to_file_doublylist(dhead, dtail, filename);
         }
         // Проверка команд для хэш-таблицы
         else if (command[0] == 'H') {

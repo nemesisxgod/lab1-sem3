@@ -163,7 +163,7 @@ void upload_to_file_list(NodeL* head, const string& filename){
 // };
 
  
-void add_to_head_doublylist(NodeD*& head, const string& value) {
+void add_to_head_doublylist(NodeD*& head, NodeD*& tail, const string& value) {
     NodeD* newNode = new NodeD;
     newNode->data = value; 
     newNode->next = head;  
@@ -171,30 +171,31 @@ void add_to_head_doublylist(NodeD*& head, const string& value) {
     if (head) {
         head->prev = newNode;
     }
+    else{
+        tail = newNode;
+    }
     head = newNode;                  
 }
 
  
-void add_to_tail_doublylist(NodeD*& head, const string& value) {
+void add_to_tail_doublylist(NodeD*& head, NodeD*& tail, const string& value) {
     NodeD* newNode = new NodeD;  
     newNode->data = value;
     newNode->next = nullptr; 
-    if (!head) {      
-        newNode->prev=nullptr;                
+    if (!head) {  
+        newNode->prev = nullptr;                 
         head = newNode;
+        tail = newNode;
     }
     else {
-        NodeD* current = head;
-        while (current->next) {            
-            current = current->next;
-        }
-        current->next = newNode;
-        newNode->prev = current;
+        newNode->prev = tail;
+        tail->next = newNode;
+        tail = newNode;
     }          
 }
 
  
-void remove_from_head_doublylist(NodeD*& head){
+void remove_from_head_doublylist(NodeD*& head, NodeD*& tail){
     if (!head){
         return;
     }
@@ -203,39 +204,41 @@ void remove_from_head_doublylist(NodeD*& head){
     if (head) {
         head->prev = nullptr;
     }
+    else{
+        tail = nullptr;
+    }
     delete temp;
 }
 
  
-void remove_from_tail_doublylist(NodeD*& head){
-    if (!head){
+void remove_from_tail_doublylist(NodeD*& head, NodeD*& tail){
+    if (!tail){
         return;
     }
 
-    if (!head->next){
+    if (head==tail){
         delete head;
         head = nullptr;
+        tail = nullptr;
         return;
     }
 
-    NodeD* current = head;
-    while (current->next){
-        current = current->next;
-    }
-    
-    current->prev->next = nullptr;
-    delete current;
+    NodeD* temp = tail;
+    tail=tail->prev;
+    tail->next=nullptr;
+
+    delete temp;
 }
 
  
-void remove_by_value_doublylist(NodeD*& head, const string& value) {
+void remove_by_value_doublylist(NodeD*& head, NodeD*& tail, const string& value) {
     if (!head) {
         return;  // Если список пуст, ничего не делаем
     }
 
     // Если удаляем первый элемент
     if (head->data == value) {
-        remove_from_head_doublylist(head);
+        remove_from_head_doublylist(head, tail);
         return;
     }
 
@@ -250,17 +253,20 @@ void remove_by_value_doublylist(NodeD*& head, const string& value) {
     if (current) {
         // Если элемент - последний
         if (!current->next) {
-            remove_from_tail_doublylist(head);
+            remove_from_tail_doublylist(head, tail);
         } else {  // Если элемент в середине списка
-            current->prev->next = current->next;  // Обновляем указатель следующего элемента
-            current->next->prev = current->prev;  // Обновляем указатель предыдущего элемента
+            tail = current->prev;  // Обновляем указатель следующего элемента
+        }
+        if (current->prev){
+            current->prev->next = current->next;
+        }
             delete current;  // Удаляем текущий элемент
         }
     }
-}
+
 
  
-NodeD* search_doublylist(NodeD*& head, const string& value,int& index) {
+NodeD* search_doublylist(NodeD* head, NodeD* tail, const string& value,int& index) {
     NodeD* current = head;
     index = 0;  // Начальный индекс
     
@@ -275,7 +281,7 @@ NodeD* search_doublylist(NodeD*& head, const string& value,int& index) {
 }
 
  
-void print_doublylist(NodeD* head) {
+void print_doublylist(NodeD* head, NodeD* tail) {
     while (head) {
         cout << head->data << " ";
         head = head->next;
@@ -284,15 +290,15 @@ void print_doublylist(NodeD* head) {
 }
 
  
-void free_doublylist(NodeD*& head) {
+void free_doublylist(NodeD*& head, NodeD*& tail) {
     while (head) {
-        remove_from_head_doublylist(head);
+        remove_from_head_doublylist(head, tail);
     }
 }
 
  
-void load_from_file_doublylist(NodeD*& head, const string& filename){
-    free_doublylist(head);
+void load_from_file_doublylist(NodeD*& head, NodeD*& tail, const string& filename){
+    free_doublylist(head, tail);
     ifstream file(filename); 
     if (!file.is_open()){ 
         cout<<"file isnot found" << endl;
@@ -301,14 +307,14 @@ void load_from_file_doublylist(NodeD*& head, const string& filename){
 
     string stroka;
     while(getline(file, stroka)){
-        add_to_tail_doublylist(head, stroka);    
+        add_to_tail_doublylist(head, tail, stroka);    
     }
 
     file.close();
 }
 
  
-void upload_to_file_doublylist(NodeD* head, const string& filename){
+void upload_to_file_doublylist(NodeD* head, NodeD* tail, const string& filename){
     ofstream file(filename);
     if (!file.is_open()) {
             cout << "File not found" << endl;
